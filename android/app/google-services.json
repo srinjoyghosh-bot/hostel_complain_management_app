@@ -1,0 +1,39 @@
+{
+  "project_info": {
+    "project_number": "752552649385",
+    "project_id": "complain-app-4c9ac",
+    "storage_bucket": "complain-app-4c9ac.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:752552649385:android:20fabe5ec1ac4b6a953fb8",
+        "android_client_info": {
+          "package_name": "com.example.hostel_complain_management_app"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "752552649385-alhb3ev5jvjce3okcd0u0oru8qnemjf2.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyDwaJ31GQGozRdzjGo__yLHi-dQlDHvaqk"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "752552649385-alhb3ev5jvjce3okcd0u0oru8qnemjf2.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
