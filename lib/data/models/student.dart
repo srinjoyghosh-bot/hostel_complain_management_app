@@ -4,7 +4,8 @@ class Student {
   final String hostelName;
   final String email;
   final String password;
-  bool isSecretary = false;
+  bool isSecretary;
+
   List<String>? complains;
 
   Student({
@@ -14,6 +15,7 @@ class Student {
     required this.email,
     required this.password,
     this.complains,
+    this.isSecretary = false,
   });
 
   Map<String, dynamic> toJson() => {
@@ -27,4 +29,18 @@ class Student {
             ? List.from(complains!.map((e) => {'docId': e}))
             : null,
       };
+
+  factory Student.fromJson(Map<String, dynamic> json) {
+    return Student(
+      id: json['id'],
+      name: json['name'],
+      hostelName: json['hostel'],
+      email: json['email'],
+      password: json['password'],
+      isSecretary: json['isSecretary'],
+      complains: json['complains'] == null
+          ? null
+          : List.from(json['complains'].map((e) => e['docId'])),
+    );
+  }
 }

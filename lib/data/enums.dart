@@ -7,6 +7,7 @@ enum Hostel {
 }
 
 enum ComplainType {
+  none,
   miscellaneous,
   mess,
   maintenance,

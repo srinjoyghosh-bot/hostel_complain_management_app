@@ -1,12 +1,15 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:hostel_complain_management_app/data/data_providers/local_storage_service.dart';
+import 'package:hostel_complain_management_app/data/enums.dart';
 import 'package:hostel_complain_management_app/data/models/complain.dart';
+import 'package:hostel_complain_management_app/data/models/student.dart';
 
 class DatabaseService {
   final FirebaseFirestore _firestore = FirebaseFirestore.instance;
-
+  final LocalStorageService _service = LocalStorageService.instance;
   Future<String> addComplain(Complain complain) async {
     try {
-      String docId, uid = complain.complainantId;
+      String docId, uid = _service.uid;
       _firestore
           .collection('complains')
           .add(complain.toJson())
@@ -32,5 +35,23 @@ class DatabaseService {
       return e.toString();
     }
     return 'Success';
+  }
+
+  Future<List<Complain>> getAllComplains({required ComplainType type}) async {
+    if (type == ComplainType.none) {
+      final snapShot = await _firestore.collection('complains').get();
+      if (snapShot.size > 0) {
+        final data =
+            snapShot.docs.map((doc) => Complain.fromJson(doc.data())).toList();
+        return data;
+      }
+      return [];
+    }
+    return [];
+  }
+
+  Future<Student> getStudentFromId(String id) async {
+    final snap = await _firestore.collection('students').doc(id).get();
+    return Student.fromJson(snap.data() as Map<String, dynamic>);
   }
 }
