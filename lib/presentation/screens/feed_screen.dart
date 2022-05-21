@@ -7,6 +7,7 @@ import 'package:hostel_complain_management_app/data/enums.dart';
 import 'package:hostel_complain_management_app/data/models/complain.dart';
 import 'package:hostel_complain_management_app/presentation/widgets/app_drawer.dart';
 import 'package:hostel_complain_management_app/presentation/widgets/complain_tile.dart';
+import 'package:hostel_complain_management_app/presentation/widgets/complain_type_buttons.dart';
 
 class FeedScreen extends StatefulWidget {
   const FeedScreen({Key? key}) : super(key: key);
@@ -17,32 +18,44 @@ class FeedScreen extends StatefulWidget {
 }
 
 class _FeedScreenState extends State<FeedScreen> {
+  void _filter(ComplainType complainType) {
+    context.read<FeedBloc>().add(FeedFetchingEvent(type: complainType));
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
         title: const Text('Feed'),
+        elevation: 0,
       ),
-      body: BlocBuilder<FeedBloc, FeedState>(builder: (context, state) {
-        if (state is FeedSuccessState) {
-          List<Complain> complains = state.complains.reversed.toList();
-          return state.complains.isNotEmpty
-              ? ListView.builder(
-                  itemBuilder: (context, index) =>
-                      ComplainTile(complain: complains[index]),
-                  itemCount: state.complains.length,
-                )
-              : const Center(
-                  child: Text('No complains yet'),
+      body: Column(
+        children: [
+          ComplainButtons(filterFunction: _filter),
+          Expanded(
+            child: BlocBuilder<FeedBloc, FeedState>(builder: (context, state) {
+              if (state is FeedSuccessState) {
+                List<Complain> complains = state.complains.reversed.toList();
+                return state.complains.isNotEmpty
+                    ? ListView.builder(
+                        itemBuilder: (context, index) =>
+                            ComplainTile(complain: complains[index]),
+                        itemCount: state.complains.length,
+                      )
+                    : const Center(
+                        child: Text('No complains yet'),
+                      );
+              } else if (state is FeedErrorState) {
+                return Center(
+                  child: Text(state.message),
                 );
-        } else if (state is FeedErrorState) {
-          return Center(
-            child: Text(state.message),
-          );
-        } else {
-          return const Center(child: CircularProgressIndicator());
-        }
-      }),
+              } else {
+                return const Center(child: CircularProgressIndicator());
+              }
+            }),
+          ),
+        ],
+      ),
       drawer: const AppDrawer(),
     );
   }

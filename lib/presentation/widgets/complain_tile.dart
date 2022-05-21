@@ -36,7 +36,6 @@ class _ComplainTileState extends State<ComplainTile> {
     Complain complain = widget.complain;
     return Container(
       margin: const EdgeInsets.only(top: 10, left: 10, right: 10),
-      padding: const EdgeInsets.all(4),
       decoration: BoxDecoration(
         borderRadius: const BorderRadius.all(
           Radius.circular(12),
