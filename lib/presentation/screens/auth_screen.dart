@@ -4,7 +4,9 @@ import 'package:hostel_complain_management_app/business_logic/auth/auth_bloc.dar
 import 'package:hostel_complain_management_app/business_logic/auth/auth_event.dart';
 import 'package:hostel_complain_management_app/business_logic/auth/auth_state.dart';
 import 'package:hostel_complain_management_app/data/enums.dart';
-import 'package:hostel_complain_management_app/presentation/screens/home_screen.dart';
+
+import '../utils/snackbars.dart';
+import 'feed_screen.dart';
 
 class AuthScreen extends StatefulWidget {
   const AuthScreen({Key? key}) : super(key: key);
@@ -53,37 +55,42 @@ class _AuthScreenState extends State<AuthScreen> {
 
   @override
   Widget build(BuildContext context) {
+    final state = context.watch<AuthBloc>().state;
     return Scaffold(
       appBar: AppBar(
-        title: const Text('Sign Up'),
+        title: (state is SwitchFormState)
+            ? state.showLogin
+                ? const Text('Log In')
+                : const Text('Sign Up')
+            : const Text('Log In'),
         centerTitle: true,
       ),
       body: BlocConsumer<AuthBloc, AuthState>(
         builder: (context, state) {
           if (state is SwitchFormState) {
             if (!state.showLogin) {
-              return _signUpScreen();
+              return _signUpScreen(state);
             }
           }
-          return _loginScreen();
+          return _loginScreen(state);
         },
         listener: (context, state) {
           if (state is LoginFailureState) {
-            showErrorSnackbar(state.message);
+            showErrorSnackbar(state.message, context);
           } else if (state is SignUpFailureState) {
-            showErrorSnackbar(state.message);
+            showErrorSnackbar(state.message, context);
           } else if (state is SignUpSuccessState) {
-            showSuccessSnackbar('Signed up successfully!');
+            showSuccessSnackbar('Signed up successfully!', context);
           } else if (state is LoginSuccessState) {
-            showSuccessSnackbar('Logged In');
-            Navigator.pushReplacementNamed(context, HomeScreen.id);
+            showSuccessSnackbar('Logged In', context);
+            Navigator.pushReplacementNamed(context, FeedScreen.id);
           }
         },
       ),
     );
   }
 
-  Widget _loginScreen() {
+  Widget _loginScreen(AuthState state) {
     return Center(
       child: SingleChildScrollView(
         child: Container(
@@ -148,9 +155,15 @@ class _AuthScreenState extends State<AuthScreen> {
               ),
               const SizedBox(height: 20),
               ElevatedButton(
-                onPressed: _onSaveLogin,
-                child: const Text('Log in'),
-              ),
+                  onPressed: _onSaveLogin,
+                  child: Padding(
+                    padding: const EdgeInsets.all(8),
+                    child: (state is LoadingState)
+                        ? const CircularProgressIndicator(
+                            color: Colors.white,
+                          )
+                        : const Text('Log in'),
+                  )),
               TextButton(
                   onPressed: () {
                     context
@@ -168,7 +181,7 @@ class _AuthScreenState extends State<AuthScreen> {
     );
   }
 
-  Widget _signUpScreen() {
+  Widget _signUpScreen(AuthState state) {
     return Center(
       child: Container(
         padding: const EdgeInsets.all(20),
@@ -296,7 +309,14 @@ class _AuthScreenState extends State<AuthScreen> {
               const SizedBox(height: 10),
               ElevatedButton(
                 onPressed: _onSaveSignup,
-                child: const Text('Sign up'),
+                child: Padding(
+                  padding: const EdgeInsets.all(8.0),
+                  child: (state is LoadingState)
+                      ? const CircularProgressIndicator(
+                          color: Colors.white,
+                        )
+                      : const Text('Sign up'),
+                ),
               ),
               // const SizedBox(height: 10),
               TextButton(
@@ -314,21 +334,5 @@ class _AuthScreenState extends State<AuthScreen> {
         ),
       ),
     );
-  }
-
-  void showErrorSnackbar(String error) {
-    ScaffoldMessenger.of(context).showSnackBar(SnackBar(
-      content: Text(error),
-      duration: const Duration(seconds: 3),
-      backgroundColor: Colors.red,
-    ));
-  }
-
-  void showSuccessSnackbar(String msg) {
-    ScaffoldMessenger.of(context).showSnackBar(SnackBar(
-      content: Text(msg),
-      duration: const Duration(seconds: 3),
-      backgroundColor: Colors.purpleAccent,
-    ));
   }
 }

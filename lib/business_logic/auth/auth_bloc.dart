@@ -10,6 +10,7 @@ class AuthBloc extends Bloc<AuthEvent, AuthState> {
       : _authRepository = repo,
         super(const AuthInitialState()) {
     on<LoginEvent>((event, emit) async {
+      emit(const LoadingState());
       try {
         final status = await _authRepository.logIn(event.email, event.password);
         if (status == 'Success') {
@@ -21,7 +22,9 @@ class AuthBloc extends Bloc<AuthEvent, AuthState> {
         emit(LoginFailureState(message: e.toString()));
       }
     });
+
     on<SignUpEvent>((event, emit) async {
+      emit(const LoadingState());
       try {
         final status = await _authRepository.signUp(
           event.name,
@@ -38,8 +41,10 @@ class AuthBloc extends Bloc<AuthEvent, AuthState> {
         emit(SignUpFailureState(message: e.toString()));
       }
     });
+
     on<SwitchFormEvent>(
         (event, emit) => emit(SwitchFormState(showLogin: event.showLogin)));
+
     on<LogOutEvent>((event, emit) async {
       try {
         final status = await _authRepository.logOut();

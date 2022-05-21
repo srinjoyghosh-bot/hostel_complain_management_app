@@ -1,10 +1,12 @@
 import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:hostel_complain_management_app/business_logic/add_complain/add_complain_bloc.dart';
 import 'package:hostel_complain_management_app/business_logic/auth/auth_bloc.dart';
 import 'package:hostel_complain_management_app/data/data_providers/local_storage_service.dart';
+import 'package:hostel_complain_management_app/data/repositories/add_complain_repository.dart';
 import 'package:hostel_complain_management_app/presentation/screens/auth_screen.dart';
-import 'package:hostel_complain_management_app/presentation/screens/home_screen.dart';
+import 'package:hostel_complain_management_app/presentation/screens/feed_screen.dart';
 import 'package:hostel_complain_management_app/router.dart';
 
 import 'data/repositories/auth_repository.dart';
@@ -27,6 +29,8 @@ class MyApp extends StatelessWidget {
     return MultiBlocProvider(
       providers: [
         BlocProvider(create: (_) => AuthBloc(repo: AuthRepository())),
+        BlocProvider(
+            create: (_) => AddComplainBloc(repo: AddComplainRepository())),
       ],
       child: MaterialApp(
         title: 'Flutter Demo',
@@ -34,7 +38,7 @@ class MyApp extends StatelessWidget {
           primarySwatch: Colors.purple,
         ),
         initialRoute: LocalStorageService.instance.isLoggedIn
-            ? HomeScreen.id
+            ? FeedScreen.id
             : AuthScreen.id,
         onGenerateRoute: AppRouter.generateRoute,
       ),

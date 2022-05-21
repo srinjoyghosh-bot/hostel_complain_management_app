@@ -58,3 +58,7 @@ class SwitchFormState extends AuthState {
 class AuthInitialState extends AuthState {
   const AuthInitialState();
 }
+
+class LoadingState extends AuthState {
+  const LoadingState();
+}

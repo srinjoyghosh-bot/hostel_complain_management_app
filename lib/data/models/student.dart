@@ -1,5 +1,3 @@
-import 'package:hostel_complain_management_app/data/models/complain.dart';
-
 class Student {
   final String id;
   final String name;
@@ -7,7 +5,7 @@ class Student {
   final String email;
   final String password;
   bool isSecretary = false;
-  List<Complain>? complains;
+  List<String>? complains;
 
   Student({
     required this.id,
@@ -26,7 +24,7 @@ class Student {
         'password': password,
         'isSecretary': isSecretary,
         'complains': complains != null
-            ? List.from(complains!.map((e) => e.toJson()))
+            ? List.from(complains!.map((e) => {'docId': e}))
             : null,
       };
 }
