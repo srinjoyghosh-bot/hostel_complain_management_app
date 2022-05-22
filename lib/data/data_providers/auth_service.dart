@@ -44,6 +44,8 @@ class AuthService {
     try {
       credential = await FirebaseAuth.instance
           .signInWithEmailAndPassword(email: emailAddress, password: password);
+      _storageService.uid = credential.user!.uid;
+      _storageService.isLoggedIn = true;
     } on FirebaseAuthException catch (e) {
       if (e.code == 'user-not-found') {
         return 'No user found for that email.';
@@ -51,8 +53,7 @@ class AuthService {
         return 'Wrong password provided for that user.';
       }
     }
-    _storageService.uid = credential!.user!.uid;
-    _storageService.isLoggedIn = true;
+
     return 'Success';
   }
 
@@ -63,6 +64,7 @@ class AuthService {
       return e.toString();
     }
     _storageService.isLoggedIn = false;
+    _storageService.uid = '';
     return 'Success';
   }
 

@@ -7,7 +7,6 @@ import 'package:hostel_complain_management_app/data/models/student.dart';
 class DatabaseService {
   final FirebaseFirestore _firestore = FirebaseFirestore.instance;
   final LocalStorageService _service = LocalStorageService.instance;
-
   Future<String> addComplain(Complain complain) async {
     try {
       String docId, uid = _service.uid;
@@ -56,5 +55,24 @@ class DatabaseService {
   Future<Student> getStudentFromId(String id) async {
     final snap = await _firestore.collection('students').doc(id).get();
     return Student.fromJson(snap.data() as Map<String, dynamic>);
+  }
+
+  Future<Complain> getComplainFromId(String id) async {
+    DocumentSnapshot snap =
+        await _firestore.collection('complains').doc(id).get();
+    return Complain.fromJson(snap.data() as Map<String, dynamic>);
+  }
+
+  Future<List<Complain>> getSelfComplains() async {
+    Student student = await getStudentFromId(_service.uid);
+    List<String>? complainIds = student.complains;
+    if (complainIds == null) {
+      return [];
+    }
+    List<Complain> selfComplains =
+        List.from(await Future.wait(complainIds.map((e) async {
+      return await getComplainFromId(e);
+    })));
+    return selfComplains;
   }
 }
