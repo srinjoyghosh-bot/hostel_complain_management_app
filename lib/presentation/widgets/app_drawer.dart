@@ -93,19 +93,20 @@ class AppDrawer extends StatelessWidget {
                   Navigator.pushReplacementNamed(context, ComplainScreen.id);
                 },
               ),
-            ListTile(
-              leading: const Icon(
-                Icons.add,
-                size: 30,
+            if (secretary == 'None')
+              ListTile(
+                leading: const Icon(
+                  Icons.add,
+                  size: 30,
+                ),
+                title: const Text(
+                  'Add Complains',
+                  style: TextStyle(fontSize: 20),
+                ),
+                onTap: () {
+                  Navigator.pushReplacementNamed(context, AddComplainScreen.id);
+                },
               ),
-              title: const Text(
-                'Add Complains',
-                style: TextStyle(fontSize: 20),
-              ),
-              onTap: () {
-                Navigator.pushReplacementNamed(context, AddComplainScreen.id);
-              },
-            ),
             ListTile(
               leading: const Icon(
                 Icons.logout,

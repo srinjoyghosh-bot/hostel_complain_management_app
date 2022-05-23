@@ -2,6 +2,8 @@ import 'package:flutter/material.dart';
 import 'package:hostel_complain_management_app/data/enums.dart';
 import 'package:hostel_complain_management_app/data/models/complain.dart';
 
+import 'complain_details_dialog.dart';
+
 class ComplainTile extends StatefulWidget {
   const ComplainTile({Key? key, required this.complain}) : super(key: key);
   final Complain complain;
@@ -49,6 +51,13 @@ class _ComplainTileState extends State<ComplainTile> {
           backgroundColor: Colors.deepPurple,
           child: Center(child: getIcon(complain.type)),
         ),
+        onTap: () {
+          showDialog(
+              context: context,
+              builder: (_) => DetailsDialog(
+                    complain: widget.complain,
+                  ));
+        },
       ),
     );
   }
