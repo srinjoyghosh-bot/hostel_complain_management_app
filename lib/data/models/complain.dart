@@ -7,6 +7,7 @@ class Complain {
   final ComplainType type;
   final String complainant;
   final String date;
+  final String hostelName;
   bool isResolved;
 
   Complain({
@@ -15,6 +16,7 @@ class Complain {
     required this.type,
     required this.complainant,
     required this.date,
+    required this.hostelName,
     this.isResolved = false,
   });
 
@@ -24,6 +26,7 @@ class Complain {
         'body': body,
         'type': type.name,
         'date': date,
+        'hostel': hostelName,
         'isResolved': isResolved,
       };
 
@@ -34,6 +37,7 @@ class Complain {
       type: COMPLAIN_TYPE[json['type']]!,
       complainant: json['by'],
       date: json['date'],
+      hostelName: json['hostel'],
       isResolved: json['isResolved'] ?? false,
     );
   }

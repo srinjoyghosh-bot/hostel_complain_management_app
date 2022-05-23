@@ -7,6 +7,7 @@ import 'package:hostel_complain_management_app/data/models/student.dart';
 class DatabaseService {
   final FirebaseFirestore _firestore = FirebaseFirestore.instance;
   final LocalStorageService _service = LocalStorageService.instance;
+
   Future<String> addComplain(Complain complain) async {
     try {
       String docId, uid = _service.uid;
@@ -42,10 +43,13 @@ class DatabaseService {
     if (snapShot.size > 0) {
       final data =
           snapShot.docs.map((doc) => Complain.fromJson(doc.data())).toList();
+      final hostelData = data
+          .where((complain) => complain.hostelName == _service.hostelName)
+          .toList();
       if (type == ComplainType.none) {
-        return data;
+        return hostelData;
       } else {
-        return data.where((complain) => complain.type == type).toList();
+        return hostelData.where((complain) => complain.type == type).toList();
       }
     } else {
       return [];
