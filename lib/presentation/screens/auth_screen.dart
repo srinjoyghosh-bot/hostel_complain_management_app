@@ -71,6 +71,8 @@ class _AuthScreenState extends State<AuthScreen> {
             if (!state.showLogin) {
               return _signUpScreen(state);
             }
+          } else if (state is LoadingState) {
+            return const Center(child: CircularProgressIndicator());
           }
           return _loginScreen(state);
         },
@@ -146,6 +148,7 @@ class _AuthScreenState extends State<AuthScreen> {
                         }
                         return null;
                       },
+                      obscureText: true,
                       onSaved: (value) {
                         password = value!.trim();
                       },
@@ -156,13 +159,9 @@ class _AuthScreenState extends State<AuthScreen> {
               const SizedBox(height: 20),
               ElevatedButton(
                   onPressed: _onSaveLogin,
-                  child: Padding(
-                    padding: const EdgeInsets.all(8),
-                    child: (state is LoadingState)
-                        ? const CircularProgressIndicator(
-                            color: Colors.white,
-                          )
-                        : const Text('Log in'),
+                  child: const Padding(
+                    padding: EdgeInsets.all(8),
+                    child: Text('Log in'),
                   )),
               TextButton(
                   onPressed: () {
@@ -299,6 +298,7 @@ class _AuthScreenState extends State<AuthScreen> {
                         }
                         return null;
                       },
+                      obscureText: true,
                       onSaved: (value) {
                         password = value!.trim();
                       },
@@ -309,13 +309,9 @@ class _AuthScreenState extends State<AuthScreen> {
               const SizedBox(height: 10),
               ElevatedButton(
                 onPressed: _onSaveSignup,
-                child: Padding(
-                  padding: const EdgeInsets.all(8.0),
-                  child: (state is LoadingState)
-                      ? const CircularProgressIndicator(
-                          color: Colors.white,
-                        )
-                      : const Text('Sign up'),
+                child: const Padding(
+                  padding: EdgeInsets.all(8.0),
+                  child: Text('Sign up'),
                 ),
               ),
               // const SizedBox(height: 10),
