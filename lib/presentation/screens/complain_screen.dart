@@ -46,7 +46,7 @@ class _ComplainScreenState extends State<ComplainScreen> {
           return const Center(child: CircularProgressIndicator());
         },
       ),
-      drawer: const AppDrawer(),
+      drawer: AppDrawer(),
     );
   }
 }

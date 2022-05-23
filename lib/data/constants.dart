@@ -14,4 +14,5 @@ const Map<String, ComplainType> COMPLAIN_TYPE = {
   'maintenance': ComplainType.maintenance,
   'cultural': ComplainType.cultural,
   'sports': ComplainType.sports,
+  'none': ComplainType.none,
 };

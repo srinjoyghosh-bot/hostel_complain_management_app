@@ -7,7 +7,10 @@ class LocalStorageService {
 
   //Keys:
   static const String currentUid = 'current_uid',
-      isLoggedInKey = 'is_logged_in_key';
+      isLoggedInKey = 'is_logged_in_key',
+      hostelNameKey = 'hostel_name_key',
+      studentNameKey = 'student_name_key',
+      secretaryDeptKey = 'secretary_department_key';
 
   //Utils:
   static Future<LocalStorageService> getInstance() async {
@@ -48,6 +51,18 @@ class LocalStorageService {
     return _getFromDisk(isLoggedInKey) ?? false;
   }
 
+  String get hostelName {
+    return _getFromDisk(hostelNameKey).toString();
+  }
+
+  String get studentName {
+    return _getFromDisk(studentNameKey).toString();
+  }
+
+  String get secretaryDepartment {
+    return _getFromDisk(secretaryDeptKey).toString();
+  }
+
   //Setters:
   set uid(String id) {
     _saveToDisk(currentUid, id);
@@ -55,5 +70,17 @@ class LocalStorageService {
 
   set isLoggedIn(bool isLoggedIn) {
     _saveToDisk(isLoggedInKey, isLoggedIn);
+  }
+
+  set hostelName(String name) {
+    _saveToDisk(hostelNameKey, name);
+  }
+
+  set studentName(String name) {
+    _saveToDisk(studentNameKey, name);
+  }
+
+  set secretaryDepartment(String department) {
+    _saveToDisk(secretaryDeptKey, department);
   }
 }

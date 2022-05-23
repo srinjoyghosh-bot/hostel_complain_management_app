@@ -154,7 +154,7 @@ class _AddComplainScreenState extends State<AddComplainScreen> {
                   onPressed: onSubmit,
                   child: const Icon(Icons.done_rounded),
                 ),
-      drawer: const AppDrawer(),
+      drawer: AppDrawer(),
     );
   }
 }

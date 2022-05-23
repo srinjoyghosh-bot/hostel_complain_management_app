@@ -1,12 +1,14 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:hostel_complain_management_app/data/constants.dart';
+import 'package:hostel_complain_management_app/data/data_providers/database_service.dart';
 import 'package:hostel_complain_management_app/data/data_providers/local_storage_service.dart';
 import 'package:hostel_complain_management_app/data/enums.dart';
 import 'package:hostel_complain_management_app/data/models/student.dart';
 
 class AuthService {
   final LocalStorageService _storageService = LocalStorageService.instance;
+  final DatabaseService _databaseService = DatabaseService();
 
   Future<String> createUser(
       String emailAddress, String password, String name, Hostel hostel) async {
@@ -44,8 +46,13 @@ class AuthService {
     try {
       credential = await FirebaseAuth.instance
           .signInWithEmailAndPassword(email: emailAddress, password: password);
+      Student student =
+          await _databaseService.getStudentFromId(credential.user!.uid);
       _storageService.uid = credential.user!.uid;
       _storageService.isLoggedIn = true;
+      _storageService.hostelName = student.hostelName;
+      _storageService.studentName = student.name;
+      _storageService.secretaryDepartment = student.secretaryDepartment;
     } on FirebaseAuthException catch (e) {
       if (e.code == 'user-not-found') {
         return 'No user found for that email.';
@@ -65,6 +72,9 @@ class AuthService {
     }
     _storageService.isLoggedIn = false;
     _storageService.uid = '';
+    _storageService.studentName = '';
+    _storageService.hostelName = '';
+    _storageService.secretaryDepartment = '';
     return 'Success';
   }
 

@@ -3,11 +3,14 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:hostel_complain_management_app/business_logic/feed/feed_bloc.dart';
 import 'package:hostel_complain_management_app/business_logic/feed/feed_event.dart';
 import 'package:hostel_complain_management_app/business_logic/feed/feed_state.dart';
+import 'package:hostel_complain_management_app/data/constants.dart';
+import 'package:hostel_complain_management_app/data/data_providers/local_storage_service.dart';
 import 'package:hostel_complain_management_app/data/enums.dart';
 import 'package:hostel_complain_management_app/data/models/complain.dart';
 import 'package:hostel_complain_management_app/presentation/widgets/app_drawer.dart';
 import 'package:hostel_complain_management_app/presentation/widgets/complain_tile.dart';
-import 'package:hostel_complain_management_app/presentation/widgets/complain_type_buttons.dart';
+import 'package:hostel_complain_management_app/presentation/widgets/secretary_complain_filter_buttons.dart';
+import 'package:hostel_complain_management_app/presentation/widgets/student_complain_type_buttons.dart';
 
 class FeedScreen extends StatefulWidget {
   const FeedScreen({Key? key}) : super(key: key);
@@ -22,6 +25,8 @@ class _FeedScreenState extends State<FeedScreen> {
     context.read<FeedBloc>().add(FeedFetchingEvent(type: complainType));
   }
 
+  String secretaryDept = LocalStorageService.instance.secretaryDepartment;
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -31,7 +36,9 @@ class _FeedScreenState extends State<FeedScreen> {
       ),
       body: Column(
         children: [
-          ComplainButtons(filterFunction: _filter),
+          (secretaryDept == 'None')
+              ? ComplainButtons(filterFunction: _filter)
+              : SecyComplainFilterButtons(filterFunction: _filter),
           Expanded(
             child: BlocBuilder<FeedBloc, FeedState>(builder: (context, state) {
               if (state is FeedSuccessState) {
@@ -56,15 +63,14 @@ class _FeedScreenState extends State<FeedScreen> {
           ),
         ],
       ),
-      drawer: const AppDrawer(),
+      drawer: AppDrawer(),
     );
   }
 
   @override
   void initState() {
     super.initState();
-    context
-        .read<FeedBloc>()
-        .add(const FeedFetchingEvent(type: ComplainType.none));
+    context.read<FeedBloc>().add(
+        FeedFetchingEvent(type: COMPLAIN_TYPE[secretaryDept.toLowerCase()]!));
   }
 }

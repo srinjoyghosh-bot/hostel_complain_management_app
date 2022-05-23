@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:hostel_complain_management_app/data/enums.dart';
+import 'package:hostel_complain_management_app/presentation/widgets/complain_button.dart';
 
 class ComplainButtons extends StatefulWidget {
   const ComplainButtons({Key? key, required this.filterFunction})
@@ -48,27 +49,13 @@ class _ComplainButtonsState extends State<ComplainButtons> {
       padding: const EdgeInsets.all(8),
       height: 60,
       child: ListView.builder(
-        itemBuilder: (context, index) =>
-            _complainButton(title: buttonTitles[index], index: index),
+        itemBuilder: (context, index) => ComplainButton(
+            title: buttonTitles[index],
+            index: index,
+            onSelect: select,
+            selectionList: selected),
         itemCount: buttonTitles.length,
         scrollDirection: Axis.horizontal,
-      ),
-    );
-  }
-
-  Widget _complainButton({required String title, required int index}) {
-    return Container(
-      margin: const EdgeInsets.only(left: 8),
-      child: InkWell(
-        onTap: () {
-          select(index);
-        },
-        child: Chip(
-          label: Text(title),
-          padding: const EdgeInsets.all(4),
-          backgroundColor: selected[index] ? Colors.white : Colors.grey,
-          side: const BorderSide(color: Colors.purpleAccent),
-        ),
       ),
     );
   }

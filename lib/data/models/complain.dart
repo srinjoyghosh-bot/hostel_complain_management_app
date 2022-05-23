@@ -7,6 +7,7 @@ class Complain {
   final ComplainType type;
   final String complainant;
   final String date;
+  bool isResolved;
 
   Complain({
     required this.title,
@@ -14,6 +15,7 @@ class Complain {
     required this.type,
     required this.complainant,
     required this.date,
+    this.isResolved = false,
   });
 
   Map<String, dynamic> toJson() => {
@@ -22,6 +24,7 @@ class Complain {
         'body': body,
         'type': type.name,
         'date': date,
+        'isResolved': isResolved,
       };
 
   factory Complain.fromJson(Map<String, dynamic> json) {
@@ -31,6 +34,7 @@ class Complain {
       type: COMPLAIN_TYPE[json['type']]!,
       complainant: json['by'],
       date: json['date'],
+      isResolved: json['isResolved'] ?? false,
     );
   }
 }

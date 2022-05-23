@@ -5,6 +5,7 @@ class Student {
   final String email;
   final String password;
   bool isSecretary;
+  String secretaryDepartment;
 
   List<String>? complains;
 
@@ -16,6 +17,7 @@ class Student {
     required this.password,
     this.complains,
     this.isSecretary = false,
+    this.secretaryDepartment = 'None',
   });
 
   Map<String, dynamic> toJson() => {
@@ -25,6 +27,7 @@ class Student {
         'email': email,
         'password': password,
         'isSecretary': isSecretary,
+        'secretaryOf': secretaryDepartment,
         'complains': complains != null
             ? List.from(complains!.map((e) => {'docId': e}))
             : null,
@@ -38,6 +41,7 @@ class Student {
       email: json['email'],
       password: json['password'],
       isSecretary: json['isSecretary'],
+      secretaryDepartment: json['secretaryOf'] ?? 'None',
       complains: json['complains'] == null
           ? null
           : List.from(json['complains'].map((e) => e['docId'])),
